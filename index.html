@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroScan AI | Professional Lie Detector</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray: #6b7280;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: white;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid var(--border);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Main Layout */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+        }
+
+        /* Panels */
+        .panel {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 25px;
+            border: 1px solid var(--border);
+            margin-bottom: 25px;
+        }
+
+        .panel-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #e5e7eb;
+        }
+
+        .panel-title i {
+            color: var(--primary);
+        }
+
+        /* Question Panel */
+        .question-counter {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            color: var(--gray);
+        }
+
+        .question-text {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            line-height: 1.8;
+            color: #f3f4f6;
+        }
+
+        /* Answer Panel */
+        .answer-methods {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+        }
+
+        .method-btn {
+            flex: 1;
+            padding: 12px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--gray);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .method-btn.active {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .answer-input {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            resize: vertical;
+            margin-bottom: 20px;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .direct-percentage {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .percentage-slider {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .percentage-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .percentage-value {
+            font-size: 2rem;
+            font-weight: 700;
+            min-width: 70px;
+            text-align: center;
+        }
+
+        /* Analysis Panel */
+        .analysis-result {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .truth-percentage {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--secondary), #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 10px 0;
+        }
+
+        .truth-label {
+            font-size: 1.2rem;
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+
+        .progress-ring {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+        }
+
+        .ring-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 8;
+        }
+
+        .ring-progress {
+            fill: none;
+            stroke: var(--secondary);
+            stroke-width: 8;
+            stroke-linecap: round;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .analysis-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .metric {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        /* History Panel */
+        .history-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .history-question {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: #d1d5db;
+        }
+
+        .history-percentage {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .percentage-bar {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 0 15px;
+        }
+
+        .percentage-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 3px;
+        }
+
+        /* Custom Questions */
+        .custom-questions-container {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .question-list {
+            margin-bottom: 20px;
+        }
+
+        .question-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .question-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: transparent;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .add-question-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        .add-question-input {
+            flex: 1;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: white;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: #1e293b;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid var(--border);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-modal {
+            background: transparent;
+            border: none;
+            color: var(--gray);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* NEXT QUESTION BUTTON STYLES */
+        .next-question-btn {
+            margin-top: 20px;
+            background: linear-gradient(45deg, #4f46e5, #6366f1);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            justify-content: center;
+            font-family: inherit;
+        }
+
+        .next-question-btn:hover {
+            background: linear-gradient(45deg, #4338ca, #4f46e5);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .next-question-btn.show-next-btn {
+            display: flex !important;
+            animation: slideUp 0.5s ease;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Status Colors */
+        .status-high { color: var(--secondary); }
+        .status-medium { color: var(--warning); }
+        .status-low { color: var(--danger); }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-brain-circuit"></i>
+                <span>NeuroScan AI</span>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" id="historyBtn">
+                    <i class="fas fa-history"></i> History
+                </button>
+                <button class="btn btn-secondary" id="customQuestionsBtn">
+                    <i class="fas fa-edit"></i> Custom Questions
+                </button>
+                <button class="btn btn-primary" id="newSessionBtn">
+                    <i class="fas fa-plus"></i> New Session
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Left Column -->
+            <div class="left-column">
+                <!-- Question Panel -->
+                <div class="panel fade-in">
+                    <div class="question-counter">
+                        <span>Question <span id="currentQuestionNum">1</span> of <span id="totalQuestions">8</span></span>
+                        <span id="questionCategory" style="color: var(--primary);">Personal</span>
+                    </div>
+                    <div class="question-text" id="questionText">
+                        Do you enjoy reading books in your free time?
+                    </div>
+                </div>
+
+                <!-- Answer Panel -->
+                <div class="panel fade-in">
+                    <div class="panel-title">
+                        <i class="fas fa-keyboard"></i>
+                        <span>Your Response</span>
+                    </div>
+                    
+                    <div class="answer-methods">
+                        <button class="method-btn active" id="typeMethodBtn">
+                            <i class="fas fa-typing"></i> Type Answer
+                        </button>
+                        <button class="method-btn" id="directMethodBtn">
+                            <i class="fas fa-sliders-h"></i> Direct Percentage
+                        </button>
+                    </div>
+
+                    <!-- Type Answer Method -->
+                    <div id="typeAnswerSection">
+                        <textarea class="answer-input" id="typeAnswerInput" 
+                                  placeholder="Type your answer here. The AI will analyze your typing patterns, hesitation, and word choice..."></textarea>
+                        <div class="typing-stats" id="typingStats" style="color: var(--gray); font-size: 0.9rem; margin-bottom: 15px;">
+                            <i class="fas fa-chart-line"></i> 
+                            <span id="wordCount">0 words</span> • 
+                            <span id="typingTime">0s</span> • 
+                            <span id="typingSpeed">0 WPM</span>
+                        </div>
+                    </div>
+
+                    <!-- Direct Percentage Method -->
+                    <div id="directPercentageSection" style="display: none;">
+                        <div style="text-align: center; margin-bottom: 20px; color: var(--gray);">
+                            <i class="fas fa-bullseye" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                            <p>Directly set how truthful you're being on a scale from 0% (Complete Lie) to 100% (Absolute Truth)</p>
+                        </div>
+                        <div class="direct-percentage">
+                            <span style="color: var(--danger);"><i class="fas fa-times-circle"></i> Lie</span>
+                            <input type="range" class="percentage-slider" id="truthSlider" min="0" max="100" value="50">
+                            <span style="color: var(--secondary);">Truth <i class="fas fa-check-circle"></i></span>
+                            <div class="percentage-value" id="sliderValue">50%</div>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <input type="text" class="answer-input" id="directReasonInput" 
+                                   placeholder="Optional: Briefly explain your reasoning..." style="min-height: 60px;">
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" id="analyzeBtn" style="width: 100%; margin-top: 20px;">
+                        <i class="fas fa-search"></i> Analyze Truthfulness
+                    </button>
+                    
+                    <!-- NEXT QUESTION BUTTON ADDED HERE -->
+                    <button class="next-question-btn" id="dynamicNextBtn">
+                        <i class="fas fa-arrow-right"></i> Next Question
+                    </button>
+                </div>
+
+                <!-- Analysis Results -->
+                <div class="panel fade-in" id="analysisPanel" style="display: none;">
+                    <div class="panel-title">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>AI Analysis Results</span>
+                    </div>
+                    
+                    <div class="analysis-result">
+                        <div class="truth-percentage" id="resultPercentage">85%</div>
+                        <div class="truth-label" id="resultLabel">Mostly Truthful</div>
+                        
+                        <svg class="progress-ring" viewBox="0 0 120 120">
+                            <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
+                            <circle class="ring-progress" cx="60" cy="60" r="52" 
+                                    stroke-dasharray="327" stroke-dashoffset="327" id="progressCircle"></circle>
+                        </svg>
+                        
+                        <div class="analysis-metrics">
+                            <div class="metric">
+                                <div class="metric-value" id="confidenceScore">92</div>
+                                <div class="metric-label">Confidence</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value" id="consistencyScore">88</div>
+                                <div class="metric-label">Consistency</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value" id="detailScore">76</div>
+                                <div class="metric-label">Detail Level</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value" id="emotionScore">65</div>
+                                <div class="metric-label">Emotional Load</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <h4 style="margin-bottom: 10px; color: #e5e7eb;">AI Insights</h4>
+                        <p id="aiInsights" style="color: var(--gray); font-style: italic;">
+                            Analysis shows consistent typing patterns with minimal hesitation, suggesting high confidence in your response.
+                        </p>
+                    </div>
+                    
+                    <button class="btn btn-secondary" id="nextQuestionBtn" style="width: 100%; margin-top: 20px;">
+                        <i class="fas fa-arrow-right"></i> Next Question
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="right-column">
+                <!-- Session Stats -->
+                <div class="panel">
+                    <div class="panel-title">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Session Statistics</span>
+                    </div>
+                    <div style="text-align: center; margin: 20px 0;">
+                        <div class="truth-percentage" style="font-size: 2.5rem;" id="sessionAverage">0%</div>
+                        <div style="color: var(--gray);">Average Truthfulness</div>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span>Questions Analyzed</span>
+                            <span id="questionsAnalyzed">0</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span>Highest Truth</span>
+                            <span class="status-high" id="highestTruth">0%</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span>Lowest Truth</span>
+                            <span class="status-low" id="lowestTruth">0%</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Session Duration</span>
+                            <span id="sessionDuration">0:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question History -->
+                <div class="panel">
+                    <div class="panel-title">
+                        <i class="fas fa-history"></i>
+                        <span>Recent Analysis</span>
+                    </div>
+                    <div class="history-list" id="historyList">
+                        <div style="text-align: center; padding: 20px; color: var(--gray);">
+                            <i class="fas fa-inbox" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                            <p>No analysis history yet</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="panel">
+                    <div class="panel-title">
+                        <i class="fas fa-bolt"></i>
+                        <span>Quick Actions</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
+                        <button class="btn btn-secondary" id="exportBtn">
+                            <i class="fas fa-file-export"></i> Export
+                        </button>
+                        <button class="btn btn-secondary" id="shareBtn">
+                            <i class="fas fa-share-alt"></i> Share
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom Questions Modal -->
+        <div class="modal" id="customQuestionsModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 style="color: white;">Custom Questions</h2>
+                    <button class="close-modal" id="closeCustomModal">&times;</button>
+                </div>
+                <div class="question-list" id="customQuestionList">
+                    <!-- Custom questions will be added here -->
+                </div>
+                <div class="add-question-form">
+                    <input type="text" class="add-question-input" id="newQuestionInput" 
+                           placeholder="Enter a new question...">
+                    <button class="btn btn-primary" id="addQuestionBtn">
+                        <i class="fas fa-plus"></i> Add
+                    </button>
+                </div>
+                <div style="margin-top: 20px; display: flex; gap: 10px;">
+                    <button class="btn btn-secondary" id="useCustomQuestionsBtn" style="flex: 1;">
+                        Use These Questions
+                    </button>
+                    <button class="btn btn-secondary" id="resetQuestionsBtn" style="flex: 1;">
+                        Reset to Default
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Modal -->
+        <div class="modal" id="historyModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 style="color: white;">Analysis History</h2>
+                    <button class="close-modal" id="closeHistoryModal">&times;</button>
+                </div>
+                <div id="detailedHistoryList" style="max-height: 400px; overflow-y: auto;">
+                    <!-- Detailed history will be added here -->
+                </div>
+                <div style="margin-top: 20px; text-align: center;">
+                    <button class="btn btn-primary" id="clearHistoryBtn">
+                        <i class="fas fa-trash"></i> Clear History
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Application State
+        const state = {
+            currentQuestionIndex: 0,
+            sessionStartTime: new Date(),
+            answers: [],
+            typingData: {
+                startTime: null,
+                lastKeyTime: null,
+                wordCount: 0,
+                backspaces: 0,
+                pauses: []
+            },
+            method: 'type', // 'type' or 'direct'
+            customQuestions: JSON.parse(localStorage.getItem('neuroscan_custom_questions')) || [],
+            history: JSON.parse(localStorage.getItem('neuroscan_history')) || [],
+            useCustomQuestions: false
+        };
+
+        // Default Questions
+        const defaultQuestions = [
+            { text: "Do you enjoy reading books in your free time?", category: "Personal" },
+            { text: "Have you ever pretended to be sick to avoid responsibilities?", category: "Ethical" },
+            { text: "Do you consider yourself an honest person?", category: "Self-Assessment" },
+            { text: "Have you ever taken credit for someone else's work?", category: "Professional" },
+            { text: "Do you return extra change if a cashier makes a mistake?", category: "Moral" },
+            { text: "Have you ever lied to protect someone's feelings?", category: "Social" },
+            { text: "Do you believe white lies are sometimes necessary?", category: "Philosophical" },
+            { text: "Have you ever exaggerated your achievements on a resume?", category: "Career" }
+        ];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initApp();
+            updateSessionStats();
+            renderHistory();
+            setupNextQuestionButton();
+        });
+
+        function initApp() {
+            // Load questions
+            loadQuestions();
+            
+            // Set up event listeners
+            document.getElementById('typeMethodBtn').addEventListener('click', () => switchMethod('type'));
+            document.getElementById('directMethodBtn').addEventListener('click', () => switchMethod('direct'));
+            document.getElementById('analyzeBtn').addEventListener('click', analyzeAnswer);
+            document.getElementById('nextQuestionBtn').addEventListener('click', nextQuestion);
+            document.getElementById('truthSlider').addEventListener('input', updateSliderValue);
+            document.getElementById('newQuestionInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') addCustomQuestion();
+            });
+            
+            // Modal buttons
+            document.getElementById('customQuestionsBtn').addEventListener('click', showCustomQuestionsModal);
+            document.getElementById('historyBtn').addEventListener('click', showHistoryModal);
+            document.getElementById('newSessionBtn').addEventListener('click', startNewSession);
+            document.getElementById('exportBtn').addEventListener('click', exportData);
+            document.getElementById('shareBtn').addEventListener('click', shareResults);
+            document.getElementById('addQuestionBtn').addEventListener('click', addCustomQuestion);
+            document.getElementById('useCustomQuestionsBtn').addEventListener('click', useCustomQuestions);
+            document.getElementById('resetQuestionsBtn').addEventListener('click', resetToDefaultQuestions);
+            document.getElementById('clearHistoryBtn').addEventListener('click', clearHistory);
+            
+            // Close modals
+            document.getElementById('closeCustomModal').addEventListener('click', () => hideModal('customQuestionsModal'));
+            document.getElementById('closeHistoryModal').addEventListener('click', () => hideModal('historyModal'));
+            
+            // Close modals on outside click
+            window.addEventListener('click', function(e) {
+                if (e.target.id === 'customQuestionsModal') hideModal('customQuestionsModal');
+                if (e.target.id === 'historyModal') hideModal('historyModal');
+            });
+            
+            // Typing tracking
+            const answerInput = document.getElementById('typeAnswerInput');
+            answerInput.addEventListener('input', trackTyping);
+            answerInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace') {
+                    state.typingData.backspaces++;
+                }
+            });
+        }
+
+        function setupNextQuestionButton() {
+            const nextBtn = document.getElementById('dynamicNextBtn');
+            
+            // Hide the original next button in analysis panel since we have the new one
+            document.getElementById('nextQuestionBtn').style.display = 'none';
+            
+            nextBtn.addEventListener('click', function() {
+                // Hide this button
+                this.classList.remove('show-next-btn');
+                
+                // Re-enable analyze button
+                document.getElementById('analyzeBtn').disabled = false;
+                
+                // Go to next question
+                nextQuestion();
+            });
+            
+            // Also connect it to analyze button
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            const originalAnalyze = analyzeBtn.onclick;
+            
+            analyzeBtn.onclick = function(e) {
+                if (originalAnalyze) originalAnalyze(e);
+                
+                // Show next button after analysis completes
+                setTimeout(() => {
+                    nextBtn.classList.add('show-next-btn');
+                    analyzeBtn.disabled = true;
+                }, 1000);
+            };
+        }
+
+        function loadQuestions() {
+            const questions = state.useCustomQuestions && state.customQuestions.length > 0 
+                ? state.customQuestions 
+                : defaultQuestions;
+            
+            state.questions = questions;
+            updateQuestionDisplay();
+        }
+
+        function updateQuestionDisplay() {
+            const question = state.questions[state.currentQuestionIndex];
+            document.getElementById('questionText').textContent = question.text;
+            document.getElementById('questionCategory').textContent = question.category;
+            document.getElementById('currentQuestionNum').textContent = state.currentQuestionIndex + 1;
+            document.getElementById('totalQuestions').textContent = state.questions.length;
+            
+            // Reset input
+            document.getElementById('typeAnswerInput').value = '';
+            document.getElementById('directReasonInput').value = '';
+            document.getElementById('truthSlider').value = 50;
+            updateSliderValue();
+            
+            // Reset typing data
+            state.typingData = {
+                startTime: null,
+                lastKeyTime: null,
+                wordCount: 0,
+                backspaces: 0,
+                pauses: []
+            };
+            updateTypingStats();
+            
+            // Hide analysis panel
+            document.getElementById('analysisPanel').style.display = 'none';
+            
+            // Hide next button
+            document.getElementById('dynamicNextBtn').classList.remove('show-next-btn');
+        }
+
+        function switchMethod(method) {
+            state.method = method;
+            
+            if (method === 'type') {
+                document.getElementById('typeMethodBtn').classList.add('active');
+                document.getElementById('directMethodBtn').classList.remove('active');
+                document.getElementById('typeAnswerSection').style.display = 'block';
+                document.getElementById('directPercentageSection').style.display = 'none';
+            } else {
+                document.getElementById('directMethodBtn').classList.add('active');
+                document.getElementById('typeMethodBtn').classList.remove('active');
+                document.getElementById('typeAnswerSection').style.display = 'none';
+                document.getElementById('directPercentageSection').style.display = 'block';
+            }
+            
+            // Hide next button when switching methods
+            document.getElementById('dynamicNextBtn').classList.remove('show-next-btn');
+            document.getElementById('analyzeBtn').disabled = false;
+        }
+
+        function trackTyping() {
+            const text = document.getElementById('typeAnswerInput').value;
+            const now = new Date();
+            
+            if (!state.typingData.startTime) {
+                state.typingData.startTime = now;
+                state.typingData.lastKeyTime = now;
+            }
+            
+            // Track pauses
+            const timeSinceLastKey = now - state.typingData.lastKeyTime;
+            if (timeSinceLastKey > 500 && state.typingData.wordCount > 0) {
+                state.typingData.pauses.push(timeSinceLastKey);
+            }
+            
+            state.typingData.lastKeyTime = now;
+            state.typingData.wordCount = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+            
+            updateTypingStats();
+        }
+
+        function updateTypingStats() {
+            const wordCount = state.typingData.wordCount;
+            const duration = state.typingData.startTime 
+                ? Math.round((new Date() - state.typingData.startTime) / 1000)
+                : 0;
+            const wpm = duration > 0 ? Math.round((wordCount / duration) * 60) : 0;
+            
+            document.getElementById('wordCount').textContent = `${wordCount} words`;
+            document.getElementById('typingTime').textContent = `${duration}s`;
+            document.getElementById('typingSpeed').textContent = `${wpm} WPM`;
+        }
+
+        function updateSliderValue() {
+            const value = document.getElementById('truthSlider').value;
+            document.getElementById('sliderValue').textContent = `${value}%`;
+        }
+
+        function analyzeAnswer() {
+            let percentage, analysisData;
+            
+            if (state.method === 'type') {
+                const answer = document.getElementById('typeAnswerInput').value.trim();
+                if (answer.length < 3) {
+                    alert("Please provide a longer answer for accurate analysis.");
+                    return;
+                }
+                analysisData = analyzeTypedAnswer(answer);
+            } else {
+                percentage = parseInt(document.getElementById('truthSlider').value);
+                const reason = document.getElementById('directReasonInput').value;
+                analysisData = analyzeDirectPercentage(percentage, reason);
+            }
+            
+            // Store answer
+            const question = state.questions[state.currentQuestionIndex];
+            state.answers.push({
+                question: question.text,
+                answer: state.method === 'type' ? document.getElementById('typeAnswerInput').value : `Direct: ${percentage}%`,
+                percentage: analysisData.percentage,
+                method: state.method,
+                timestamp: new Date().toISOString(),
+                metrics: analysisData.metrics
+            });
+            
+            // Add to history
+            state.history.push({
+                question: question.text,
+                percentage: analysisData.percentage,
+                timestamp: new Date().toISOString()
+            });
+            
+            // Save to localStorage
+            localStorage.setItem('neuroscan_history', JSON.stringify(state.history));
+            
+            // Display results
+            displayAnalysisResults(analysisData);
+            
+            // Update UI
+            document.getElementById('analyzeBtn').disabled = true;
+            document.getElementById('analysisPanel').style.display = 'block';
+            
+            // Update session stats
+            updateSessionStats();
+            renderHistory();
+        }
+
+        function analyzeTypedAnswer(answer) {
+            const duration = state.typingData.startTime 
+                ? (new Date() - state.typingData.startTime) / 1000 
+                : 1;
+            
+            // Calculate base percentage based on typing patterns
+            let percentage = 50;
+            
+            // Factors from typing patterns
+            const wpm = (state.typingData.wordCount / duration) * 60;
+            const avgPause = state.typingData.pauses.length > 0 
+                ? state.typingData.pauses.reduce((a, b) => a + b) / state.typingData.pauses.length / 1000 
+                : 0;
+            
+            // Adjust percentage based on patterns
+            if (wpm > 40) percentage += 15; // Fast typing = confidence
+            if (wpm < 20) percentage -= 10; // Slow typing = hesitation
+            if (avgPause < 1) percentage += 10; // Minimal pauses = certainty
+            if (avgPause > 3) percentage -= 15; // Many pauses = uncertainty
+            if (state.typingData.backspaces < 3) percentage += 5; // Few corrections
+            if (state.typingData.backspaces > 8) percentage -= 10; // Many corrections
+            if (answer.length > 100) percentage += 10; // Detailed answer
+            if (answer.length < 20) percentage -= 10; // Brief answer
+            
+            // Add some randomness for "AI feel"
+            percentage += (Math.random() * 20 - 10);
+            
+            // Clamp between 5-95
+            percentage = Math.max(5, Math.min(95, Math.round(percentage)));
+            
+            // Generate metrics
+            const confidence = Math.min(100, Math.round(percentage + (Math.random() * 20 - 5)));
+            const consistency = Math.min(100, Math.round(percentage + (Math.random() * 15 - 10)));
+            const detail = Math.min(100, Math.round(Math.min(100, answer.length / 2)));
+            const emotion = Math.min(100, Math.round(30 + (Math.random() * 40)));
+            
+            return {
+                percentage: percentage,
+                metrics: {
+                    confidence,
+                    consistency,
+                    detail,
+                    emotion,
+                    wpm: Math.round(wpm),
+                    hesitation: avgPause.toFixed(1),
+                    backspaces: state.typingData.backspaces
+                },
+                insights: generateInsights(percentage, answer, 'typed')
+            };
+        }
+
+        function analyzeDirectPercentage(percentage, reason) {
+            // Generate metrics based on percentage
+            const confidence = Math.min(100, Math.round(percentage + (Math.random() * 10 - 5)));
+            const consistency = Math.min(100, Math.round(percentage + (Math.random() * 15 - 10)));
+            const detail = reason && reason.length > 10 ? Math.min(100, Math.round(reason.length / 3)) : 30;
+            const emotion = Math.min(100, Math.round(percentage * 0.7 + (Math.random() * 20)));
+            
+            return {
+                percentage: percentage,
+                metrics: {
+                    confidence,
+                    consistency,
+                    detail,
+                    emotion,
+                    wpm: 0,
+                    hesitation: 0,
+                    backspaces: 0
+                },
+                insights: generateInsights(percentage, reason || "No reason provided", 'direct')
+            };
+        }
+
+        function generateInsights(percentage, answer, type) {
+            const insights = [];
+            
+            if (percentage >= 80) {
+                insights.push("High truthfulness detected with strong conviction.");
+                insights.push(type === 'typed' ? "Typing patterns show confidence and certainty." : "Direct rating indicates honesty.");
+            } else if (percentage >= 60) {
+                insights.push("Moderate truthfulness with some reservation.");
+                insights.push(type === 'typed' ? "Some hesitation detected in response patterns." : "Rating suggests partial truthfulness.");
+            } else if (percentage >= 40) {
+                insights.push("Mixed signals detected with potential evasion.");
+                insights.push("Response shows characteristics of partial disclosure.");
+            } else {
+                insights.push("Low truthfulness indicators detected.");
+                insights.push(type === 'typed' ? "Analysis suggests possible deception patterns." : "Low rating indicates potential dishonesty.");
+            }
+            
+            if (type === 'typed' && answer.length > 100) {
+                insights.push("Detailed response provides more analytical data.");
+            }
+            
+            return insights.join(" ");
+        }
+
+        function displayAnalysisResults(data) {
+            const percentage = data.percentage;
+            
+            // Update percentage display
+            document.getElementById('resultPercentage').textContent = `${percentage}%`;
+            
+            // Update label
+            let label, labelColor;
+            if (percentage >= 80) {
+                label = "Highly Truthful";
+                labelColor = "var(--secondary)";
+            } else if (percentage >= 60) {
+                label = "Mostly Truthful";
+                labelColor = "#3b82f6";
+            } else if (percentage >= 40) {
+                label = "Somewhat Truthful";
+                labelColor = "var(--warning)";
+            } else {
+                label = "Potentially Deceptive";
+                labelColor = "var(--danger)";
+            }
+            document.getElementById('resultLabel').textContent = label;
+            document.getElementById('resultLabel').style.color = labelColor;
+            
+            // Update progress ring
+            const circle = document.getElementById('progressCircle');
+            const circumference = 2 * Math.PI * 52;
+            const offset = circumference - (percentage / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+            
+            // Update metrics
+            document.getElementById('confidenceScore').textContent = data.metrics.confidence;
+            document.getElementById('consistencyScore').textContent = data.metrics.consistency;
+            document.getElementById('detailScore').textContent = data.metrics.detail;
+            document.getElementById('emotionScore').textContent = data.metrics.emotion;
+            
+            // Color metrics
+            colorMetric('confidenceScore', data.metrics.confidence);
+            colorMetric('consistencyScore', data.metrics.consistency);
+            colorMetric('detailScore', data.metrics.detail);
+            colorMetric('emotionScore', data.metrics.emotion);
+            
+            // Update insights
+            document.getElementById('aiInsights').textContent = data.insights;
+        }
+
+        function colorMetric(elementId, value) {
+            const element = document.getElementById(elementId);
+            if (value >= 80) {
+                element.className = 'metric-value status-high';
+            } else if (value >= 60) {
+                element.className = 'metric-value status-medium';
+            } else {
+                element.className = 'metric-value status-low';
+            }
+        }
+
+        function nextQuestion() {
+            state.currentQuestionIndex++;
+            
+            if (state.currentQuestionIndex >= state.questions.length) {
+                // End of session
+                alert("Session complete! Check your overall statistics.");
+                state.currentQuestionIndex = state.questions.length - 1;
+                return;
+            }
+            
+            updateQuestionDisplay();
+        }
+
+        function updateSessionStats() {
+            if (state.answers.length === 0) {
+                document.getElementById('sessionAverage').textContent = "0%";
+                document.getElementById('questionsAnalyzed').textContent = "0";
+                document.getElementById('highestTruth').textContent = "0%";
+                document.getElementById('lowestTruth').textContent = "0%";
+                return;
+            }
+            
+            const percentages = state.answers.map(a => a.percentage);
+            const average = Math.round(percentages.reduce((a, b) => a + b) / percentages.length);
+            const highest = Math.max(...percentages);
+            const lowest = Math.min(...percentages);
+            
+            // Update duration
+            const duration = Math.round((new Date() - state.sessionStartTime) / 1000);
+            const minutes = Math.floor(duration / 60);
+            const seconds = duration % 60;
+            
+            document.getElementById('sessionAverage').textContent = `${average}%`;
+            document.getElementById('questionsAnalyzed').textContent = state.answers.length;
+            document.getElementById('highestTruth').textContent = `${highest}%`;
+            document.getElementById('lowestTruth').textContent = `${lowest}%`;
+            document.getElementById('sessionDuration').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function renderHistory() {
+            const historyList = document.getElementById('historyList');
+            const recentHistory = state.history.slice(-5).reverse();
+            
+            if (recentHistory.length === 0) {
+                historyList.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: var(--gray);">
+                        <i class="fas fa-inbox" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                        <p>No analysis history yet</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            historyList.innerHTML = recentHistory.map(item => `
+                <div class="history-item">
+                    <div class="history-question">${truncateText(item.question, 50)}</div>
+                    <div class="history-percentage">
+                        <span>${item.percentage}%</span>
+                        <div class="percentage-bar">
+                            <div class="percentage-fill" style="width: ${item.percentage}%"></div>
+                        </div>
+                        <small>${formatTime(item.timestamp)}</small>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showCustomQuestionsModal() {
+            renderCustomQuestions();
+            showModal('customQuestionsModal');
+        }
+
+        function renderCustomQuestions() {
+            const list = document.getElementById('customQuestionList');
+            
+            if (state.customQuestions.length === 0) {
+                list.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: var(--gray);">
+                        <i class="fas fa-question-circle" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                        <p>No custom questions yet</p>
+                        <small>Add your own questions below</small>
+                    </div>
+                `;
+                return;
+            }
+            
+            list.innerHTML = state.customQuestions.map((question, index) => `
+                <div class="question-item">
+                    <span>${truncateText(question.text, 40)}</span>
+                    <div class="question-actions">
+                        <button class="action-btn" onclick="editCustomQuestion(${index})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn" onclick="deleteCustomQuestion(${index})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addCustomQuestion() {
+            const input = document.getElementById('newQuestionInput');
+            const text = input.value.trim();
+            
+            if (text.length < 5) {
+                alert("Please enter a meaningful question (at least 5 characters).");
+                return;
+            }
+            
+            state.customQuestions.push({
+                text: text,
+                category: "Custom"
+            });
+            
+            localStorage.setItem('neuroscan_custom_questions', JSON.stringify(state.customQuestions));
+            input.value = '';
+            renderCustomQuestions();
+        }
+
+        function deleteCustomQuestion(index) {
+            if (confirm("Delete this custom question?")) {
+                state.customQuestions.splice(index, 1);
+                localStorage.setItem('neuroscan_custom_questions', JSON.stringify(state.customQuestions));
+                renderCustomQuestions();
+            }
+        }
+
+        function editCustomQuestion(index) {
+            const newText = prompt("Edit question:", state.customQuestions[index].text);
+            if (newText && newText.trim().length > 5) {
+                state.customQuestions[index].text = newText.trim();
+                localStorage.setItem('neuroscan_custom_questions', JSON.stringify(state.customQuestions));
+                renderCustomQuestions();
+            }
+        }
+
+        function useCustomQuestions() {
+            if (state.customQuestions.length === 0) {
+                alert("Please add some custom questions first!");
+                return;
+            }
+            
+            state.useCustomQuestions = true;
+            state.currentQuestionIndex = 0;
+            state.answers = [];
+            loadQuestions();
+            hideModal('customQuestionsModal');
+            alert("Now using your custom questions! Starting new session.");
+        }
+
+        function resetToDefaultQuestions() {
+            state.useCustomQuestions = false;
+            state.currentQuestionIndex = 0;
+            state.answers = [];
+            loadQuestions();
+            hideModal('customQuestionsModal');
+            alert("Reset to default questions. Starting new session.");
+        }
+
+        function showHistoryModal() {
+            const historyList = document.getElementById('detailedHistoryList');
+            const recentHistory = [...state.history].reverse();
+            
+            if (recentHistory.length === 0) {
+                historyList.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--gray);">
+                        <i class="fas fa-history" style="font-size: 3rem; margin-bottom: 20px;"></i>
+                        <h3>No History</h3>
+                        <p>Your analysis history will appear here</p>
+                    </div>
+                `;
+            } else {
+                historyList.innerHTML = recentHistory.map(item => `
+                    <div class="history-item" style="margin-bottom: 15px;">
+                        <div class="history-question" style="font-weight: 500;">${item.question}</div>
+                        <div class="history-percentage">
+                            <span style="font-size: 1.2rem; font-weight: 600;">${item.percentage}%</span>
+                            <div class="percentage-bar">
+                                <div class="percentage-fill" style="width: ${item.percentage}%"></div>
+                            </div>
+                            <small>${formatDate(item.timestamp)}</small>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            showModal('historyModal');
+        }
+
+        function clearHistory() {
+            if (confirm("Clear all analysis history? This cannot be undone.")) {
+                state.history = [];
+                localStorage.removeItem('neuroscan_history');
+                hideModal('historyModal');
+                renderHistory();
+            }
+        }
+
+        function startNewSession() {
+            if (confirm("Start a new session? Current progress will be saved to history.")) {
+                state.currentQuestionIndex = 0;
+                state.answers = [];
+                state.sessionStartTime = new Date();
+                loadQuestions();
+                updateSessionStats();
+                document.getElementById('analyzeBtn').disabled = false;
+                document.getElementById('analysisPanel').style.display = 'none';
+                document.getElementById('dynamicNextBtn').classList.remove('show-next-btn');
+            }
+        }
+
+        function exportData() {
+            const data = {
+                session: {
+                    date: new Date().toISOString(),
+                    duration: Math.round((new Date() - state.sessionStartTime) / 1000),
+                    averageTruthfulness: state.answers.length > 0 
+                        ? Math.round(state.answers.reduce((sum, a) => sum + a.percentage, 0) / state.answers.length)
+                        : 0,
+                    answers: state.answers
+                },
+                history: state.history
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `neuroscan-analysis-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function shareResults() {
+            if (state.answers.length === 0) {
+                alert("Analyze some questions first to share results!");
+                return;
+            }
+            
+            const average = Math.round(state.answers.reduce((sum, a) => sum + a.percentage, 0) / state.answers.length);
+            const text = `I scored ${average}% truthfulness on the NeuroScan AI Lie Detector! Try it yourself.`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'NeuroScan AI Results',
+                    text: text,
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(text + " " + window.location.href);
+                alert("Results copied to clipboard!");
+            }
+        }
+
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function hideModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function truncateText(text, maxLength) {
+            return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
+        }
+
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function formatDate(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleDateString() + " " + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // Global functions for custom questions
+        window.editCustomQuestion = editCustomQuestion;
+        window.deleteCustomQuestion = deleteCustomQuestion;
+    </script>
+
+    <footer style="text-align:center;margin-top:20px;">
+  <a href="about.html">About</a> |
+  <a href="privacy.html">Privacy</a> |
+  <a href="contact.html">Contact</a>
+    </footer>
+</body>
+                            
