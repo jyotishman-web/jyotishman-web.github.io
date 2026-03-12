@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Hill Climb Racer</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="wrap">
+  <canvas id="c"></canvas>
+
+  <!-- HUD -->
+  <div id="hud">
+    <div class="hpill">📏 <b id="hDist">0</b> m</div>
+    <div id="fuelBox">
+      <div id="fuelLbl">⛽ FUEL</div>
+      <div id="fuelTrack"><div id="fuelBar"></div></div>
+    </div>
+    <div class="hpill">🪙 <b id="hCoins">0</b></div>
+  </div>
+
+  <!-- Control buttons -->
+  <button class="gbtn" id="btnBrake">
+    <span class="bicon">◀</span>
+    <span class="blabel">BRAKE</span>
+  </button>
+  <button class="gbtn" id="btnGas">
+    <span class="bicon">▶</span>
+    <span class="blabel">GAS</span>
+  </button>
+
+  <!-- Start / End overlay -->
+  <div id="overlay">
+    <div id="ovTitle">⛰ HILL CLIMB</div>
+    <div id="ovSub">R A C E R</div>
+    <div id="ovContent">
+      <p class="ohint">Drive as far as possible without flipping!</p>
+      <p class="ohint">Collect ⛽ fuel cans to keep going</p>
+      <br>
+      <p class="ohint" style="color:#70ee60">▶ GAS &nbsp;— accelerate forward</p>
+      <p class="ohint" style="color:#ff7060">◀ BRAKE — reverse / lean forward</p>
+      <br>
+      <p class="ohint" style="color:#666;font-size:11px">Keyboard: ← → or A D</p>
+    </div>
+    <button id="ovBtn" onclick="startGame()">🚗 PLAY</button>
+  </div>
+</div><!-- end #wrap -->
+
+<!--
+  Script load order matters — each file depends on globals from the previous one:
+  1. audio.js   — Web Audio engine (no deps)
+  2. terrain.js — terrain generation (needs W, H from game.js — OK, used at call time)
+  3. physics.js — car physics (needs terrain, audio)
+  4. render.js  — all draw functions (needs ctx, W, H, camX, car, terrain, etc.)
+  5. game.js    — canvas setup, input, game loop (defines all shared globals)
+-->
+<script src="js/audio.js"></script>
+<script src="js/terrain.js"></script>
+<script src="js/physics.js"></script>
+<script src="js/render.js"></script>
+<script src="js/game.js"></script>
+
+</body>
+</html>
